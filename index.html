@@ -252,6 +252,12 @@
             padding: 0;
             cursor: pointer;
         }
+        .conversation-item .convo-pin {
+            flex: 0 0 auto;
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-right: 2px;
+        }
         .conversation-item .convo-menu-trigger {
             opacity: 0;
             transition: opacity 0.15s;
@@ -399,31 +405,6 @@
             font-size: 16px;
             margin: 80px 20px;
         }
-
-        .scroll-to-bottom {
-            position: absolute;
-            right: 16px;
-            bottom: 130px;
-            background: var(--scroll-btn-bg);
-            border: 1px solid var(--scroll-btn-bg);
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-color);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s, background 0.15s;
-            z-index: 20;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            padding: 0;
-        }
-        .scroll-to-bottom.visible { opacity: 1; pointer-events: auto; }
-        .scroll-to-bottom:hover { background: var(--scroll-btn-hover); }
-        .scroll-to-bottom svg { width: 16px; height: 16px; }
 
         .message-group {
             display: flex;
@@ -600,27 +581,6 @@
         .model-bubble ul, .model-bubble ol { margin-left: 18px; margin-bottom: 0.6em; }
         .model-bubble li { margin-bottom: 0.2em; }
         .model-bubble blockquote { border-left: 3px solid var(--divider); padding-left: 10px; margin: 0.6em 0; color: var(--text-muted); font-style: italic; }
-        .model-bubble pre {
-            background-color: var(--code-block-bg);
-            padding: 12px 18px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 6px 0;
-            position: relative;
-            padding-top: 36px;
-            border: 0.5px solid var(--code-block-border);
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-        .model-bubble pre code {
-            background-color: transparent;
-            padding: 0;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            white-space: pre;
-        }
         .model-bubble code:not(pre code) {
             background-color: var(--code-inline-bg);
             padding: 2px 5px;
@@ -628,34 +588,87 @@
             font-size: 85%;
         }
 
-        .code-action-button {
-            position: absolute;
-            top: 6px;
-            padding: 3px 8px;
-            font-size: 11px;
-            border: 1px solid var(--divider);
-            border-radius: 4px;
-            background-color: var(--icon-btn-bg);
-            color: var(--text-muted);
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.15s;
+        .code-block-wrapper {
+            margin: 10px 0;
+            border: 0.5px solid var(--code-block-border);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: var(--code-block-bg);
+            display: flex;
+            flex-direction: column;
+        }
+        .code-block-wrapper pre {
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 14px 18px;
+            margin: 0;
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            color: inherit;
+        }
+        .code-block-wrapper pre code {
+            background-color: transparent;
+            padding: 0;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            white-space: pre;
+        }
+        .code-block-footer {
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-width: 24px;
-            min-height: 24px;
-            font-family: inherit;
+            justify-content: space-between;
+            padding: 6px 10px;
+            background-color: rgba(46,46,46,0.35);
+            border-top: 1px solid var(--code-block-border);
+            font-family: ui-monospace, monospace;
+            font-size: 11px;
+            color: var(--text-dim);
         }
-        .model-bubble pre:hover .code-action-button { opacity: 1; }
-        .code-action-button:hover { background: var(--icon-btn-hover); color: var(--text-primary); }
-        .copy-code-button { right: 6px; }
-        .copy-code-button.copied { background-color: #34c759; color: #111; }
-
-        .streaming-indicator {
-            display: inline-block;
-            animation: blink 1s step-start 0s infinite;
+        html[data-theme='light'] .code-block-footer {
+            background-color: rgba(0,0,0,0.03);
+        }
+        .code-block-footer .code-lang {
             opacity: 0.7;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+        .code-block-footer .copy-code-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            background-color: var(--icon-btn-bg);
+            border: 1px solid var(--divider);
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 11px;
+            font-family: inherit;
+            transition: background 0.15s, color 0.15s;
+        }
+        .code-block-footer .copy-code-button:hover {
+            background: var(--icon-btn-hover);
+            color: var(--text-primary);
+        }
+        .code-block-footer .copy-code-button.copied {
+            background-color: #34c759;
+            color: #111;
+            border-color: #34c759;
+        }
+
+        .streaming-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: currentColor;
+            opacity: 0.7;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+            animation: blink 1s step-start infinite;
         }
         @keyframes blink { 50% { opacity: 0; } }
 
@@ -678,7 +691,38 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            position: relative;
         }
+
+        .scroll-to-bottom-inline {
+            display: none;
+            position: absolute;
+            right: 16px;
+            top: -46px;
+            background: var(--scroll-btn-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            z-index: 20;
+            outline: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s;
+        }
+        .scroll-to-bottom-inline.visible {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+        .scroll-to-bottom-inline:hover { background: var(--scroll-btn-hover); }
+        .scroll-to-bottom-inline svg { width: 16px; height: 16px; }
 
         .chat-input-container {
             background-color: var(--input-bg);
@@ -1097,6 +1141,23 @@
 
         input[type="file"] { display: none; }
 
+        .token-counter {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 2px 0;
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .token-counter .token-label { opacity: 0.7; }
+        .token-counter .token-value { color: var(--text-muted); font-weight: 600; }
+        .token-counter .token-sep { opacity: 0.4; margin: 0 1px; }
+        .token-counter .token-total { color: var(--text-dim); }
+        .token-counter.streaming .token-value { color: var(--primary-color); }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -1132,9 +1193,22 @@
             }
             .sidebar-toggle-main:not(.collapsed) span { background: var(--text-primary); opacity: 1; }
             .chat-content { padding: 16px 12px; gap: 24px; }
-            .scroll-to-bottom { right: 12px; bottom: 120px; width: 32px; height: 32px; }
             .dots-dropdown { min-width: 260px; max-width: 90vw; }
             .chat-bubble { max-width: 92%; }
+        }
+        @media (max-width: 768px) and (orientation: portrait) {
+            html { font-size: 18px; }
+            .chat-placeholder,
+            .user-bubble,
+            .input-area { font-size: 18px; }
+            .chat-bubble,
+            .model-bubble { font-size: 17px; }
+            .conversation-item,
+            .sidebar-footer .footer-btn { font-size: 15px; }
+            .message-author { font-size: 12px; }
+            .message-timestamp { font-size: 11px; }
+            .dots-dropdown .dropdown-btn,
+            .dots-dropdown .model-option-dropdown { font-size: 14px; }
         }
     </style>
 </head>
@@ -1190,15 +1264,17 @@
             <div class="chat-content" id="chatContent">
                 <div class="chat-placeholder">How can I help you today?</div>
             </div>
-            <button class="scroll-to-bottom" id="scrollToBottomBtn" title="Scroll to bottom">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
-                </svg>
-            </button>
         </div>
 
         <div class="input-container">
             <div class="input-wrapper">
+
+                <button class="scroll-to-bottom-inline" id="scrollToBottomBtn" title="Scroll to bottom" aria-label="Scroll to bottom">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M19 12l-7 7-7-7"/>
+                    </svg>
+                </button>
+
                 <div class="file-preview" id="filePreview"></div>
 
                 <div class="chat-input-container">
@@ -1271,6 +1347,13 @@
                         </button>
                     </div>
                 </div>
+
+                <div class="token-counter" id="tokenCounter">
+                    <span class="token-label">Tokens:</span>
+                    <span class="token-value" id="tokenResponse">0</span>
+                    <span class="token-sep">/</span>
+                    <span class="token-total" id="tokenTotal">0</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1336,6 +1419,61 @@
                 'gemini-3.5-flash': { name: 'Gemini 3.5 Flash', modelId: 'gemini-3.5-flash', display: 'Pro Reasoning Flash', dot: 'reasoning', desc: 'Deep Reasoning', maxOutputTokens: 64000, maxInputTokens: 1000000 }
             };
 
+            const SERVER_STORAGE_URL = '/api/data';
+            let serverAvailable = null;
+
+            async function checkServerAvailability() {
+                try {
+                    const response = await fetch(SERVER_STORAGE_URL, { method: 'HEAD', headers: { 'X-Probe': '1' } });
+                    serverAvailable = response.ok;
+                } catch (e) {
+                    serverAvailable = false;
+                }
+                return serverAvailable;
+            }
+
+            async function storageGet(key) {
+                if (serverAvailable) {
+                    try {
+                        const response = await fetch(SERVER_STORAGE_URL + '/' + encodeURIComponent(key));
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data && typeof data.value !== 'undefined') return data.value;
+                        }
+                    } catch (e) {}
+                }
+                try {
+                    const raw = localStorage.getItem(key);
+                    return raw ? JSON.parse(raw) : null;
+                } catch (e) { return null; }
+            }
+
+            async function storageSet(key, value) {
+                if (serverAvailable) {
+                    try {
+                        const response = await fetch(SERVER_STORAGE_URL + '/' + encodeURIComponent(key), {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ value: value })
+                        });
+                        if (response.ok) return true;
+                    } catch (e) {}
+                }
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                    return true;
+                } catch (e) { return false; }
+            }
+
+            async function storageRemove(key) {
+                if (serverAvailable) {
+                    try {
+                        await fetch(SERVER_STORAGE_URL + '/' + encodeURIComponent(key), { method: 'DELETE' });
+                    } catch (e) {}
+                }
+                try { localStorage.removeItem(key); } catch (e) {}
+            }
+
             const elements = {
                 sidebar: document.getElementById('sidebar'),
                 sidebarToggle: document.getElementById('sidebarToggle'),
@@ -1365,6 +1503,9 @@
                 searchInput: document.getElementById('searchInput'),
                 dotsBtn: document.getElementById('dotsBtn'),
                 dotsDropdown: document.getElementById('dotsDropdown'),
+                tokenCounter: document.getElementById('tokenCounter'),
+                tokenResponse: document.getElementById('tokenResponse'),
+                tokenTotal: document.getElementById('tokenTotal'),
             };
 
             let state = {
@@ -1372,10 +1513,145 @@
                 isStreaming: false, settings: { theme: 'dark', model: 'gemini-3.5-flash-lite', remember: false },
                 user: null, pinnedConversations: [], searchQuery: '', apiKeyIndex: 0,
                 editingMessageIndex: null, isUserScrolling: false, autoScrollEnabled: true,
+                totalTokensUsed: 0,
             };
 
             let statusTimer = null;
             let conversationIdCounter = 0;
+
+            let displayBuffer = '';
+            let targetBuffer = '';
+            let displayAnimationFrame = null;
+            let displayMessageIndex = -1;
+            let lastFrameTime = 0;
+            let streamingBubbleElement = null;
+
+            function startDisplayAnimation(messageIndex) {
+                displayMessageIndex = messageIndex;
+                if (displayAnimationFrame) cancelAnimationFrame(displayAnimationFrame);
+                lastFrameTime = performance.now();
+
+                const cc = elements.chatContent;
+                const groups = cc.querySelectorAll('.message-group.model');
+                const lastGroup = groups[groups.length - 1];
+                streamingBubbleElement = lastGroup ? lastGroup.querySelector('.model-bubble') : null;
+
+                function tick(now) {
+                    const delta = now - lastFrameTime;
+                    lastFrameTime = now;
+
+                    if (displayBuffer.length < targetBuffer.length) {
+                        const remaining = targetBuffer.length - displayBuffer.length;
+                        let charsToAdd;
+
+                        if (remaining > 1500) charsToAdd = 250;
+                        else if (remaining > 600) charsToAdd = 120;
+                        else if (remaining > 250) charsToAdd = 60;
+                        else if (remaining > 100) charsToAdd = 30;
+                        else if (remaining > 30) charsToAdd = 12;
+                        else if (remaining > 10) charsToAdd = 5;
+                        else charsToAdd = 2;
+
+                        if (delta > 32) charsToAdd = Math.max(charsToAdd, Math.ceil(remaining * 0.4));
+                        if (delta > 60) charsToAdd = remaining;
+
+                        displayBuffer += targetBuffer.slice(displayBuffer.length, displayBuffer.length + charsToAdd);
+                        updateStreamingMessage();
+                    }
+                    displayAnimationFrame = requestAnimationFrame(tick);
+                }
+                displayAnimationFrame = requestAnimationFrame(tick);
+            }
+
+            function stopDisplayAnimation() {
+                if (displayAnimationFrame) {
+                    cancelAnimationFrame(displayAnimationFrame);
+                    displayAnimationFrame = null;
+                }
+            }
+
+            function wrapPreElements(container) {
+                container.querySelectorAll('pre').forEach(pre => {
+                    if (pre.closest('.code-block-wrapper')) return;
+
+                    const code = pre.querySelector('code');
+                    if (!code) return;
+
+                    let lang = 'code';
+                    const match = code.className.match(/language-([\w-]+)/);
+                    if (match) lang = match[1];
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-block-wrapper';
+
+                    const footer = document.createElement('div');
+                    footer.className = 'code-block-footer';
+
+                    const langLabel = document.createElement('span');
+                    langLabel.className = 'code-lang';
+                    langLabel.textContent = lang;
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-code-button';
+                    copyBtn.type = 'button';
+                    copyBtn.textContent = 'Copy';
+
+                    copyBtn.addEventListener('click', function() {
+                        const textToCopy = code.textContent;
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(textToCopy).then(() => {
+                                copyBtn.textContent = 'Copied!';
+                                copyBtn.classList.add('copied');
+                                setTimeout(() => {
+                                    copyBtn.textContent = 'Copy';
+                                    copyBtn.classList.remove('copied');
+                                }, 2000);
+                            }).catch(() => {
+                                fallbackCopy(textToCopy, copyBtn);
+                            });
+                        } else {
+                            fallbackCopy(textToCopy, copyBtn);
+                        }
+                    });
+
+                    footer.appendChild(langLabel);
+                    footer.appendChild(copyBtn);
+
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(pre);
+                    wrapper.appendChild(footer);
+                });
+            }
+
+            function scrollToBottomNow() {
+                const c = elements.chatContainer;
+                c.scrollTop = c.scrollHeight;
+            }
+
+            function updateStreamingMessage() {
+                if (!streamingBubbleElement) {
+                    const cc = elements.chatContent;
+                    const groups = cc.querySelectorAll('.message-group.model');
+                    const lastGroup = groups[groups.length - 1];
+                    streamingBubbleElement = lastGroup ? lastGroup.querySelector('.model-bubble') : null;
+                }
+                if (!streamingBubbleElement) return;
+
+                try {
+                    const parsed = marked.parse(displayBuffer || '');
+                    streamingBubbleElement.innerHTML = parsed + '<span class="streaming-cursor"></span>';
+                    streamingBubbleElement.querySelectorAll('pre code').forEach(block => {
+                        try { hljs.highlightElement(block); } catch(e) {}
+                    });
+                    wrapPreElements(streamingBubbleElement);
+                } catch(e) {
+                    streamingBubbleElement.textContent = displayBuffer;
+                }
+
+                if (state.autoScrollEnabled) {
+                    scrollToBottomNow();
+                }
+            }
 
             const authDB = {
                 users: JSON.parse(localStorage.getItem('nexusai_users') || '{}'),
@@ -1456,9 +1732,9 @@
             }
             function getStorageKey() { return state.user ? 'nexusai_data_' + state.user.id : 'nexusai_data_guest'; }
 
-            function loadData() {
+            async function loadData() {
                 try {
-                    const data = JSON.parse(localStorage.getItem(getStorageKey()) || 'null');
+                    const data = await storageGet(getStorageKey());
                     if (data) {
                         state.conversations = data.conversations || [];
                         state.activeConversationId = data.activeConversationId || null;
@@ -1466,18 +1742,21 @@
                         state.pinnedConversations = data.pinnedConversations || [];
                         if (data.settings) Object.assign(state.settings, data.settings);
                         if (data.apiKeyIndex !== undefined) state.apiKeyIndex = data.apiKeyIndex;
+                        if (data.totalTokensUsed !== undefined) state.totalTokensUsed = data.totalTokensUsed;
                         return true;
                     }
                 } catch(e) {}
                 return false;
             }
-            function saveData() {
+
+            async function saveData() {
                 try {
-                    localStorage.setItem(getStorageKey(), JSON.stringify({
+                    await storageSet(getStorageKey(), {
                         conversations: state.conversations, activeConversationId: state.activeConversationId,
                         currentMessages: state.currentMessages, pinnedConversations: state.pinnedConversations,
                         settings: state.settings, apiKeyIndex: state.apiKeyIndex,
-                    }));
+                        totalTokensUsed: state.totalTokensUsed,
+                    });
                 } catch(e) {}
             }
 
@@ -1519,6 +1798,43 @@
             }
             function closeDotsDropdown() { elements.dotsDropdown.classList.remove('open'); }
             function toggleDotsDropdown() { elements.dotsDropdown.classList.toggle('open'); }
+
+            function estimateTokens(text) {
+                if (!text || typeof text !== 'string') return 0;
+                return Math.max(1, Math.round(text.length / 4));
+            }
+
+            function updateTokenCounter(responseTokens, streaming) {
+                if (typeof responseTokens === 'number') {
+                    elements.tokenResponse.textContent = responseTokens.toLocaleString();
+                }
+                elements.tokenTotal.textContent = state.totalTokensUsed.toLocaleString();
+                if (streaming) elements.tokenCounter.classList.add('streaming');
+                else elements.tokenCounter.classList.remove('streaming');
+            }
+
+            function recalculateTotalTokens() {
+                let total = 0;
+                state.currentMessages.forEach(msg => {
+                    if (msg.role === 'user') {
+                        msg.parts.forEach(p => {
+                            if (p.text) total += estimateTokens(p.text);
+                        });
+                    } else if (msg.role === 'model') {
+                        const text = msg.parts.map(p => p.text || '').join('');
+                        total += estimateTokens(text);
+                    }
+                });
+                state.totalTokensUsed = total;
+            }
+
+            function forceLandscape() {
+                try {
+                    if (screen.orientation && typeof screen.orientation.lock === 'function') {
+                        screen.orientation.lock('landscape').catch(function() {});
+                    }
+                } catch(e) {}
+            }
 
             function decodeJwt(token) {
                 try {
@@ -1573,11 +1889,10 @@
                                 if (result.error) { showStatus(result.error, true); return; }
                                 state.user = result.user;
                                 saveCurrentSession(result.sessionId);
-                                renderAuth(); loadData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings();
+                                renderAuth(); loadData().then(() => { renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings(); });
                                 showStatus('Welcome, ' + state.user.name + '!');
                                 closeSettings();
                             } catch(e) {
-                                console.error('Google callback error:', e);
                                 showStatus('Erro no login do Google', true);
                             }
                         }
@@ -1593,7 +1908,6 @@
                         width: 300
                     });
                 } catch(e) {
-                    console.error('Google render error:', e);
                     showStatus('Erro ao carregar botão do Google', true);
                 }
             }
@@ -1661,7 +1975,7 @@
                     if (result.error) { errorEl.textContent = result.error; return; }
                     state.user = result.user;
                     saveCurrentSession(result.sessionId);
-                    renderAuth(); loadData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings();
+                    renderAuth(); loadData().then(() => { renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings(); });
                     showStatus('Welcome back, ' + state.user.name + '!');
                     closeSettings();
                 });
@@ -1678,7 +1992,7 @@
                     const loginResult = authDB.login(email, password);
                     state.user = result.user;
                     saveCurrentSession(loginResult.sessionId);
-                    renderAuth(); loadData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings();
+                    renderAuth(); loadData().then(() => { renderConversations(); renderMessages(); updateTitle(); updateSendButton(); applySettings(); });
                     showStatus('Welcome, ' + state.user.name + '!');
                     closeSettings();
                 });
@@ -1693,9 +2007,11 @@
                 if (sessionId) authDB.logout(sessionId);
                 clearCurrentSession();
                 state.user = null;
-                localStorage.removeItem(getStorageKey());
+                storageRemove(getStorageKey());
                 state.conversations = []; state.activeConversationId = null; state.currentMessages = []; state.pinnedConversations = [];
+                state.totalTokensUsed = 0;
                 renderAuth(); renderConversations(); renderMessages(); updateTitle(); updateSendButton();
+                updateTokenCounter(0, false);
                 showStatus('Logged out');
             }
 
@@ -1729,11 +2045,14 @@
                     if (conv.id === state.activeConversationId) item.classList.add('active');
                     const titleSpan = document.createElement('span');
                     titleSpan.className = 'convo-title';
-                    if (state.pinnedConversations.includes(conv.id)) titleSpan.innerHTML = '📌 ' + (conv.title || 'New Conversation');
-                    else titleSpan.textContent = conv.title || 'New Conversation';
+                    if (state.pinnedConversations.includes(conv.id)) {
+                        titleSpan.innerHTML = '<span class="convo-pin">[PIN]</span> ' + escapeHtml(conv.title || 'New Conversation');
+                    } else {
+                        titleSpan.textContent = conv.title || 'New Conversation';
+                    }
                     const menuBtn = document.createElement('button');
                     menuBtn.className = 'convo-menu-trigger';
-                    menuBtn.innerHTML = '⋮';
+                    menuBtn.innerHTML = '···';
                     const dropdown = document.createElement('div');
                     dropdown.className = 'convo-dropdown';
                     const renameBtn = document.createElement('button');
@@ -1778,7 +2097,9 @@
                 const id = generateId();
                 state.conversations.unshift({ id, title: 'New Conversation', messages: [], createdAt: new Date().toISOString() });
                 state.activeConversationId = id; state.currentMessages = []; state.editingMessageIndex = null;
+                state.totalTokensUsed = 0;
                 saveData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton();
+                updateTokenCounter(0, false);
                 showStatus('New conversation created');
                 closeSidebarOnMobile();
             }
@@ -1786,7 +2107,9 @@
                 const conv = state.conversations.find(c => c.id === id);
                 if (!conv) return;
                 state.activeConversationId = id; state.currentMessages = conv.messages || []; state.editingMessageIndex = null;
+                recalculateTotalTokens();
                 saveData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton();
+                updateTokenCounter(0, false);
                 closeSidebarOnMobile(); scrollToBottom();
             }
             function deleteConversation(id) {
@@ -1795,10 +2118,11 @@
                 state.pinnedConversations = state.pinnedConversations.filter(pid => pid !== id);
                 if (state.activeConversationId === id) {
                     const next = state.conversations[0];
-                    if (next) { state.activeConversationId = next.id; state.currentMessages = next.messages || []; }
+                    if (next) { state.activeConversationId = next.id; state.currentMessages = next.messages || []; recalculateTotalTokens(); }
                     else { createNewConversation(); return; }
                 }
                 saveData(); renderConversations(); renderMessages(); updateTitle(); updateSendButton();
+                updateTokenCounter(0, false);
                 showStatus('Conversation deleted');
             }
             function updateTitle() {
@@ -1815,9 +2139,32 @@
                 saveData();
             }
 
+            function fallbackCopy(text, button) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    button.textContent = 'Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch(e) {
+                    button.textContent = 'Failed';
+                    setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+                }
+                document.body.removeChild(textarea);
+            }
+
             function renderMessages() {
                 const cc = elements.chatContent;
                 cc.innerHTML = '';
+                streamingBubbleElement = null;
                 if (state.currentMessages.length === 0) {
                     cc.innerHTML = '<div class="chat-placeholder">How can I help you today?</div>';
                     updateScrollButton();
@@ -1876,27 +2223,15 @@
                     } else {
                         const text = msg.parts.map(p => p.text || '').join('');
                         if (msg.isStreaming) {
-                            bubble.innerHTML = '<span class="streaming-indicator">▌</span>';
+                            bubble.innerHTML = '<span class="streaming-cursor"></span>';
+                            streamingBubbleElement = bubble;
                         } else {
                             try {
                                 bubble.innerHTML = marked.parse(text || '[Empty response]');
                                 bubble.querySelectorAll('pre code').forEach(block => {
-                                    try {
-                                        hljs.highlightElement(block);
-                                        const pre = block.parentElement;
-                                        if (pre && !pre.querySelector('.copy-code-button')) {
-                                            const copyBtn = document.createElement('button');
-                                            copyBtn.className = 'code-action-button copy-code-button';
-                                            copyBtn.innerHTML = '📋 Copy';
-                                            copyBtn.addEventListener('click', () => {
-                                                navigator.clipboard.writeText(block.textContent);
-                                                copyBtn.textContent = '✅ Copied!';
-                                                setTimeout(() => { copyBtn.textContent = '📋 Copy'; }, 2000);
-                                            });
-                                            pre.appendChild(copyBtn);
-                                        }
-                                    } catch(e) {}
+                                    try { hljs.highlightElement(block); } catch(e) {}
                                 });
+                                wrapPreElements(bubble);
                             } catch(e) { bubble.textContent = text || '[Error]'; }
                         }
                     }
@@ -1905,10 +2240,10 @@
                         const actions = document.createElement('div');
                         actions.className = 'message-actions';
                         const editBtn = document.createElement('button');
-                        editBtn.className = 'msg-action-btn edit-btn'; editBtn.textContent = '✎ Edit';
+                        editBtn.className = 'msg-action-btn edit-btn'; editBtn.textContent = 'Edit';
                         editBtn.addEventListener('click', () => startEditing(index));
                         const deleteBtn = document.createElement('button');
-                        deleteBtn.className = 'msg-action-btn delete-btn'; deleteBtn.textContent = '✕ Delete';
+                        deleteBtn.className = 'msg-action-btn delete-btn'; deleteBtn.textContent = 'Delete';
                         deleteBtn.addEventListener('click', () => deleteMessage(index));
                         actions.appendChild(editBtn); actions.appendChild(deleteBtn);
                         group.appendChild(actions);
@@ -1939,7 +2274,11 @@
                 if (state.isStreaming) return;
                 if (!confirm('Delete this message and all following messages?')) return;
                 state.currentMessages = state.currentMessages.slice(0, index);
-                saveCurrentConversation(); renderMessages(); showStatus('Message deleted');
+                saveCurrentConversation();
+                recalculateTotalTokens();
+                renderMessages();
+                updateTokenCounter(0, false);
+                showStatus('Message deleted');
             }
             async function regenerateFromIndex(index) {
                 if (state.isStreaming) return;
@@ -1956,7 +2295,17 @@
                 const maxTokens = modelConfig ? modelConfig.maxOutputTokens : 8000;
                 const aiMessage = { role: 'model', parts: [{ text: '' }], timestamp: new Date().toISOString(), isStreaming: true };
                 state.currentMessages.push(aiMessage);
-                saveCurrentConversation(); renderMessages(); scrollToBottom();
+                const currentIndex = state.currentMessages.length - 1;
+
+                saveCurrentConversation();
+                renderMessages();
+                scrollToBottomNow();
+
+                displayBuffer = '';
+                targetBuffer = '';
+                streamingBubbleElement = null;
+                startDisplayAnimation(currentIndex);
+
                 state.isStreaming = true;
                 showStatus('NexusAI is thinking...');
                 let fullResponse = '';
@@ -2011,6 +2360,7 @@
                             const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
                             let buffer = '';
                             let chunkCount = 0;
+                            let lastTokenUpdate = 0;
 
                             while (true) {
                                 const { value, done } = await reader.read();
@@ -2028,12 +2378,18 @@
                                                     const textPart = chunkData.candidates[0].content?.parts?.[0]?.text;
                                                     if (textPart) {
                                                         fullResponse += textPart;
+                                                        targetBuffer = fullResponse;
                                                         chunkCount++;
-                                                        if (state.currentMessages[state.currentMessages.length - 1].isStreaming) state.currentMessages[state.currentMessages.length - 1].isStreaming = false;
-                                                        state.currentMessages[state.currentMessages.length - 1].parts[0].text = fullResponse;
-                                                        if (chunkCount % 3 === 0 || chunkCount < 5) {
-                                                            renderMessages();
-                                                            if (state.autoScrollEnabled) scrollToBottom();
+
+                                                        state.currentMessages[currentIndex].parts[0].text = fullResponse;
+
+                                                        const now = Date.now();
+                                                        if (now - lastTokenUpdate > 200) {
+                                                            lastTokenUpdate = now;
+                                                            const currentResponseTokens = estimateTokens(fullResponse);
+                                                            const previewTotal = state.totalTokensUsed + currentResponseTokens;
+                                                            updateTokenCounter(currentResponseTokens, true);
+                                                            elements.tokenTotal.textContent = previewTotal.toLocaleString();
                                                         }
                                                     }
                                                     const finishReason = chunkData.candidates[0].finishReason;
@@ -2044,23 +2400,19 @@
                                     }
                                 }
                             }
-                            renderMessages();
-                            if (state.autoScrollEnabled) scrollToBottom();
                             hideStatus();
                             success = true;
                         } catch(error) {
-                            console.error('API Error:', error);
                             if (attempts < maxAttempts) { rotateApiKey(); showStatus('Error: ' + error.message + '. Trying next key...', true); }
                             else throw error;
                         }
                     }
 
                     if (!success) {
-                        if (state.currentMessages[state.currentMessages.length - 1].isStreaming) state.currentMessages[state.currentMessages.length - 1].isStreaming = false;
                         if (!fullResponse) {
                             fullResponse = '(All API keys failed. Please try again later.)';
-                            state.currentMessages[state.currentMessages.length - 1].parts[0].text = fullResponse;
-                            renderMessages();
+                            targetBuffer = fullResponse;
+                            state.currentMessages[currentIndex].parts[0].text = fullResponse;
                         }
                         isComplete = true; break;
                     }
@@ -2090,13 +2442,36 @@
                     await new Promise(r => setTimeout(r, 300));
                 }
 
-                if (state.currentMessages[state.currentMessages.length - 1].isStreaming) {
-                    state.currentMessages[state.currentMessages.length - 1].isStreaming = false;
-                    renderMessages();
-                }
+                const waitForDisplay = function() {
+                    return new Promise(resolve => {
+                        const check = function() {
+                            if (displayBuffer.length >= targetBuffer.length) {
+                                resolve();
+                            } else {
+                                setTimeout(check, 30);
+                            }
+                        };
+                        check();
+                    });
+                };
+
+                await waitForDisplay();
+                stopDisplayAnimation();
+
+                state.currentMessages[currentIndex].isStreaming = false;
+                state.currentMessages[currentIndex].parts[0].text = targetBuffer;
+
+                renderMessages();
+
+                recalculateTotalTokens();
                 saveCurrentConversation();
                 state.isStreaming = false;
                 updateSendButton();
+
+                const responseTokens = estimateTokens(targetBuffer);
+                updateTokenCounter(responseTokens, false);
+                elements.tokenTotal.textContent = state.totalTokensUsed.toLocaleString();
+
                 showStatus(continueCount >= MAX_CONTINUES && !isComplete ? 'Response stopped due to length limit' : 'Response complete!', false, continueCount >= MAX_CONTINUES);
             }
 
@@ -2106,6 +2481,7 @@
                 if (!text && state.selectedFiles.length === 0) return;
                 state.isStreaming = true;
                 updateSendButton();
+                state.autoScrollEnabled = true;
                 const userParts = [];
                 const imageData = [];
                 if (text) userParts.push({ text });
@@ -2127,6 +2503,8 @@
                 if (imageData) message.imageData = imageData;
                 state.currentMessages.push(message);
                 saveCurrentConversation(); renderMessages(); updateSendButton();
+                recalculateTotalTokens();
+                updateTokenCounter(0, false);
             }
             function scrollToBottom() {
                 requestAnimationFrame(() => {
@@ -2137,8 +2515,8 @@
                 const c = elements.chatContainer;
                 const btn = elements.scrollToBottomBtn;
                 const atBottom = c.scrollHeight - c.scrollTop - c.clientHeight < 50;
-                if (!atBottom && state.currentMessages.length > 0) { btn.classList.add('visible'); state.autoScrollEnabled = false; }
-                else { btn.classList.remove('visible'); state.autoScrollEnabled = true; }
+                if (!atBottom && state.currentMessages.length > 0) { btn.classList.add('visible'); }
+                else { btn.classList.remove('visible'); }
             }
             function updateFilePreview() {
                 const c = elements.filePreview;
@@ -2150,7 +2528,7 @@
                     const img = document.createElement('img');
                     img.src = 'data:' + file.mimeType + ';base64,' + file.data;
                     const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-file'; removeBtn.innerHTML = '✕';
+                    removeBtn.className = 'remove-file'; removeBtn.textContent = 'X';
                     removeBtn.addEventListener('click', e => {
                         e.stopPropagation();
                         state.selectedFiles.splice(index, 1);
@@ -2178,14 +2556,14 @@
                 Promise.all(promises).then(results => {
                     state.selectedFiles = results;
                     updateFilePreview();
-                    showStatus('📎 ' + results.length + ' file(s) ready to send');
+                    showStatus(results.length + ' file(s) ready to send');
                     updateSendButton();
                 });
             }
 
             function saveChat() {
                 if (state.currentMessages.length === 0) { showStatus('Nothing to save', false, true); return; }
-                const data = { messages: state.currentMessages, settings: state.settings, timestamp: new Date().toISOString(), user: state.user ? { email: state.user.email, name: state.user.name } : null, pinnedConversations: state.pinnedConversations, apiKeyIndex: state.apiKeyIndex };
+                const data = { messages: state.currentMessages, settings: state.settings, timestamp: new Date().toISOString(), user: state.user ? { email: state.user.email, name: state.user.name } : null, pinnedConversations: state.pinnedConversations, apiKeyIndex: state.apiKeyIndex, totalTokensUsed: state.totalTokensUsed };
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -2208,7 +2586,10 @@
                             if (data.settings) { Object.assign(state.settings, data.settings); applySettings(); }
                             if (data.pinnedConversations) state.pinnedConversations = data.pinnedConversations;
                             if (data.apiKeyIndex !== undefined) state.apiKeyIndex = data.apiKeyIndex;
+                            recalculateTotalTokens();
+                            if (data.totalTokensUsed !== undefined) state.totalTokensUsed = data.totalTokensUsed;
                             saveCurrentConversation(); renderMessages(); updateTitle(); updateSendButton();
+                            updateTokenCounter(0, false);
                             showStatus('Chat loaded successfully');
                         }
                     } catch (err) { showStatus('Invalid file format', true); }
@@ -2261,7 +2642,19 @@
                 elements.sendButton.disabled = !(hasText || hasFile) || state.isStreaming;
             }
 
-            function init() {
+            async function init() {
+                forceLandscape();
+
+                const tryLockAgain = function() {
+                    forceLandscape();
+                    document.removeEventListener('click', tryLockAgain);
+                    document.removeEventListener('touchstart', tryLockAgain);
+                };
+                document.addEventListener('click', tryLockAgain);
+                document.addEventListener('touchstart', tryLockAgain);
+
+                await checkServerAvailability();
+
                 const savedTheme = localStorage.getItem('nexusai-theme') || 'dark';
                 setTheme(savedTheme);
                 const hasSaved = loadSavedSettings();
@@ -2269,7 +2662,7 @@
                 const restored = restoreSession();
                 if (restored) state.user = restored.user;
                 renderAuth();
-                loadData();
+                await loadData();
                 if (state.conversations.length === 0) createNewConversation();
                 else if (state.activeConversationId) {
                     const conv = state.conversations.find(c => c.id === state.activeConversationId);
@@ -2279,7 +2672,9 @@
                     state.activeConversationId = state.conversations[0].id;
                     state.currentMessages = state.conversations[0].messages || [];
                 }
+                recalculateTotalTokens();
                 renderConversations(); renderMessages(); updateTitle(); updateSendButton();
+                updateTokenCounter(0, false);
 
                 if (window.innerWidth <= 768) {
                     elements.sidebar.classList.add('collapsed');
@@ -2344,14 +2739,33 @@
                 elements.fileInput.addEventListener('change', handleFileSelect);
 
                 elements.scrollToBottomBtn.addEventListener('click', () => {
-                    scrollToBottom(); state.autoScrollEnabled = true; updateScrollButton();
-                });
-                elements.chatContainer.addEventListener('scroll', () => {
-                    const c = elements.chatContainer;
-                    const atBottom = c.scrollHeight - c.scrollTop - c.clientHeight < 50;
-                    state.autoScrollEnabled = atBottom;
+                    scrollToBottom();
+                    state.autoScrollEnabled = true;
                     updateScrollButton();
                 });
+
+                let userScrollTimeout = null;
+                elements.chatContainer.addEventListener('scroll', () => {
+                    clearTimeout(userScrollTimeout);
+                    userScrollTimeout = setTimeout(() => {
+                        const c = elements.chatContainer;
+                        const atBottom = c.scrollHeight - c.scrollTop - c.clientHeight < 50;
+                        state.autoScrollEnabled = atBottom;
+                        updateScrollButton();
+                    }, 50);
+                }, { passive: true });
+
+                elements.chatContainer.addEventListener('wheel', () => {
+                    const c = elements.chatContainer;
+                    const atBottom = c.scrollHeight - c.scrollTop - c.clientHeight < 50;
+                    if (!atBottom) state.autoScrollEnabled = false;
+                }, { passive: true });
+
+                elements.chatContainer.addEventListener('touchmove', () => {
+                    const c = elements.chatContainer;
+                    const atBottom = c.scrollHeight - c.scrollTop - c.clientHeight < 50;
+                    if (!atBottom) state.autoScrollEnabled = false;
+                }, { passive: true });
 
                 elements.themeToggleBtn.addEventListener('click', toggleTheme);
                 elements.closeSettingsBtn.addEventListener('click', closeSettings);
@@ -2373,6 +2787,14 @@
                         elements.sidebar.classList.remove('collapsed');
                         elements.sidebarToggle.classList.remove('collapsed');
                     }
+                });
+
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(forceLandscape, 300);
+                });
+
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden) forceLandscape();
                 });
 
                 showStatus("All Directs Reserveds © Zk' StudioCompany 2026!");
